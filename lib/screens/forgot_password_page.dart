@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:scooter_app/screens/refresh_password_page.dart';
-import 'package:scooter_app/services/login_service_repository.dart';
 import 'package:http/http.dart' as http;
+import 'package:scooter_app/screens/refresh_password_page.dart';
+import '../services/user_service_repository.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -12,12 +12,7 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final t1 = TextEditingController();
-  late LoginServiceRepository loginService;
-  @override
-  void initState() {
-    super.initState();
-    loginService = LoginServiceRepository(http.Client());
-  }
+  final userService = UserServiceRepository(http.Client());
 
   @override
   Widget build(BuildContext context) {
@@ -77,38 +72,33 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ],
                               ),
                             );
-                          } else {
-                            loginService.checkEmail(t1.text).then((value) => {
-                                  if (value != "")
-                                    {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RefreshPasswordPage(
-                                                    userId: value,
-                                                  )))
-                                    }
-                                  else
-                                    {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) => AlertDialog(
-                                          elevation: 0,
-                                          content: const Text(
-                                              "Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı."),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: const Text("Kapat"),
-                                              onPressed: () {
-                                                Navigator.of(ctx).pop();
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    }
-                                });
+                            return;
                           }
+                          userService.checkEmail(t1.text).then((value) {
+                            if (value.id?.isEmpty ?? true) {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  elevation: 0,
+                                  content: const Text("Kullanıcı bulunamadı !"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text("Kapat"),
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                              return;
+                            }
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      RefreshPasswordPage(user: value)),
+                            );
+                          });
                         },
                         child: Container(
                           height: 50,

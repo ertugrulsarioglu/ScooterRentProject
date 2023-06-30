@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:scooter_app/screens/login_page.dart';
 import 'package:scooter_app/services/user_service_repository.dart';
 import 'package:http/http.dart' as http;
+import '../models/user.dart';
 
 class RefreshPasswordPage extends StatefulWidget {
-  RefreshPasswordPage({Key? key, required this.userId}) : super(key: key);
-  final String userId;
+  const RefreshPasswordPage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<RefreshPasswordPage> createState() => _RefreshPasswordPageState();
@@ -18,12 +19,7 @@ class _RefreshPasswordPageState extends State<RefreshPasswordPage> {
   bool _isObsecure = true;
   bool _isObsecure2 = true;
 
-  late UserServiceRepository userService;
-  @override
-  void initState() {
-    super.initState();
-    userService = UserServiceRepository(http.Client());
-  }
+  final userService = UserServiceRepository(http.Client());
 
   @override
   Widget build(BuildContext context) {
@@ -98,24 +94,7 @@ class _RefreshPasswordPageState extends State<RefreshPasswordPage> {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          if (t1.text.isEmpty || t2.text.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                elevation: 0,
-                                content:
-                                    const Text("Alanlar boş bırakılamaz !"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text("Kapat"),
-                                    onPressed: () {
-                                      Navigator.of(ctx).pop();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else if (t1.text != t2.text) {
+                          if (t1.text != t2.text) {
                             showDialog(
                               context: context,
                               builder: (ctx) => AlertDialog(
@@ -132,6 +111,7 @@ class _RefreshPasswordPageState extends State<RefreshPasswordPage> {
                                 ],
                               ),
                             );
+                            return;
                           } else if (t1.text.length < 8 || t2.text.length < 8) {
                             showDialog(
                               context: context,
@@ -151,35 +131,49 @@ class _RefreshPasswordPageState extends State<RefreshPasswordPage> {
                                 ],
                               ),
                             );
-                          } else if (t1.text == t2.text) {
-                            userService
-                                .updatePassword(widget.userId, t1.text)
-                                .then((value) => {
-                                      if (value)
-                                        {
-                                          showDialog(
-                                            context: context,
-                                            builder: (ctx) => AlertDialog(
-                                              elevation: 0,
-                                              content: const Text(
-                                                  "Şifre başarıyla değiştirildi."),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: const Text("Kapat"),
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const LoginPage()));
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        }
-                                    });
+                            return;
                           }
+
+                          widget.user.password = t1.text;
+                          userService.update(widget.user).then((value) {
+                            if (value?.id?.isEmpty ?? true) {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  elevation: 0,
+                                  content: const Text("Şifre güncellenmedi !"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text("Kapat"),
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                              return;
+                            }
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                elevation: 0,
+                                content: const Text("Şifre güncellendi !"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text("Kapat"),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginPage()),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
                         },
                         child: Container(
                           height: 50,

@@ -1,55 +1,46 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:scooter_app/services/base_service_repository.dart';
+import '../models/user.dart';
 
 class UserServiceRepository extends BaseServiceRepository {
-  final http.Client _httpClient;
   final String _controller = "User";
-  UserServiceRepository(this._httpClient);
+  UserServiceRepository(http.Client client) : super(client);
 
-  Future<void> register(String username, String password, String email,
-      String phone, String address) async {
+  Future<bool> register(User user) async {
     try {
-      final url = Uri.parse("${baseUrl}/${_controller}/Register");
-      final Map<String, String> data = {
-        'username': username,
-        'password': password,
-        'email': email,
-        'phone': phone,
-        'adress': address,
-      };
-      final requestBody = json.encode(data);
-      final response = await _httpClient.post(
-        url,
-        headers: {"Content-Type": "application/json; charset=UTF-8"},
-        body: requestBody,
-      );
-      if (response.statusCode == 200) {
-        print("İstek başarılı.");
-      } else {
-        print("Hata mesajı : ${response.body}");
-      }
+      final response = await post("$_controller/AddUser", user);
+      response.body;
+      return response.statusCode == HttpStatus.ok ? true : false;
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 
-  Future<bool> updatePassword(String userId, String password) async {
+  Future<User?> update(User user) async {
     try {
-      final url = Uri.parse("${baseUrl}/${_controller}/UpdateUserPassword?id=${userId}&password=${password}");
-      final response = await _httpClient.post(
-        url,
-      );
-      if (response.statusCode == 200) {
-        print("İstek başarılı.");
-        return true;
+      final response = await post("$_controller/UpdateUser", user);
+      if (response.statusCode == HttpStatus.ok) {
+        return User.fromJson(jsonDecode(response.body));
       } else {
-        print("Hata mesajı : ${response.body}");
-        return false;
+        return User();
       }
     } catch (e) {
-      print(e);
-        return false;
+      throw Exception(e);
+    }
+  }
+
+  Future<User> checkEmail(String email) async {
+    try {
+      final response = await get("$_controller/GetUserByEmail?email=$email");
+      if (response.statusCode == HttpStatus.ok) {
+        return User.fromJson(jsonDecode(response.body));
+      } else {
+        return User();
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

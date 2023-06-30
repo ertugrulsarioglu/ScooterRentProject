@@ -1,9 +1,10 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
-import 'package:scooter_app/screens/home_page.dart';
+import 'package:scooter_app/extensions/date_time_extension.dart';
 import 'package:scooter_app/screens/profile_settings_page.dart';
+import '../services/login_service_repository.dart';
+import '../models/user.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,11 +14,36 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  LoginServiceRepository userService = LoginServiceRepository(http.Client());
+  late Future<User> user;
+  @override
+  void initState() {
+    super.initState();
+    user = userService.getUser();
+  }
+
+  void onDoubleTap() {
+    Navigator.of(context)
+        .push(MaterialPageRoute<bool>(builder: (BuildContext context) {
+      return const ProfileSettingsPage();
+    })).then((value) {
+      if (value == true) {
+        setState(() {
+          user = userService.getUser();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xff21254A),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF713cd0),
+        title: const Text('Profil'),
+      ),
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -30,78 +56,162 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            Positioned(
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        color: Colors.white,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()));
-                        },
-                        icon: const Icon(
-                          Icons.home,
-                        ),
+            FutureBuilder<User>(
+              future: user,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final user = snapshot.data;
+                  return Positioned(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 100),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          CircularProfileAvatar(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-UABw6y78UKp-MUjYdXCa4nZhTCpLs65ipg&usqp=CAU",
+                            borderWidth: 4.0,
+                            radius: 60.0,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Bilgileri güncellemek için çift tıklayınız.'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            },
+                            onDoubleTap: onDoubleTap,
+                            child: Text(
+                              "${user!.firstName} ${user.lastName}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            "Müşteri",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          ListView(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Kullanıcı Adı değiştirilemez !'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: CardItem(
+                                    icon: Icons.person,
+                                    title: "Kullanıcı Adı",
+                                    content: "${user.username}",
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Bilgileri güncellemek için çift tıklayınız.'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                onDoubleTap: onDoubleTap,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: CardItem(
+                                    icon: Icons.phone,
+                                    title: "Telefon",
+                                    content: "${user.phoneNumber}",
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Bilgileri güncellemek için çift tıklayınız.'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                onDoubleTap: onDoubleTap,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: CardItem(
+                                    icon: Icons.mail_outline,
+                                    title: "E-Posta",
+                                    content: "${user.email}",
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Bilgileri güncellemek için çift tıklayınız.'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                onDoubleTap: onDoubleTap,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: CardItem(
+                                    icon: Icons.location_on_outlined,
+                                    title: "Adres",
+                                    content: "${user.address}",
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 8.0),
+                                child: CardItem(
+                                  icon: Icons.online_prediction,
+                                  title: "Son Giriş",
+                                  content: user.lastLogindDate.toLongDateTime(),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 8.0),
+                                child: CardItem(
+                                  icon: Icons.access_time,
+                                  title: "Katılım Tarihi",
+                                  content: user.createdDate.toLongDateTime(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        color: Colors.white,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProfileSettingsPage()));
-                        },
-                        icon: const Icon(Icons.settings),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Text('An error occurred');
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
             ),
-            Positioned(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 100),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProfileAvatar(
-                      "https://i.pravatar.cc/300",
-                      borderWidth: 4.0,
-                      radius: 60.0,
-                    ),
-                    //customSizedBox(),
-                    const Text(
-                      "Ertuğrul",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      "Müşteri",
-                      style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.bold),
-                    ),
-
-                    ListView.builder(
-                      itemBuilder: (context, index) => CardItem(),
-                      shrinkWrap: true,
-                      itemCount: 6,
-                      physics: const NeverScrollableScrollPhysics(),
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -110,8 +220,14 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class CardItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+
   const CardItem({
-    super.key,
+    required this.icon,
+    required this.title,
+    required this.content,
   });
 
   @override
@@ -119,6 +235,7 @@ class CardItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
+        color: Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 21.0),
           child: Row(
@@ -127,9 +244,9 @@ class CardItem extends StatelessWidget {
               IconButton(
                 onPressed: () {},
                 icon: Icon(
-                  Icons.access_time,
+                  icon,
                   size: 40.0,
-                  color: Colors.purple.shade800,
+                  color: Colors.blueGrey,
                 ),
               ),
               const SizedBox(
@@ -140,18 +257,16 @@ class CardItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    "Katılım Tarihi",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
+                    title,
+                    style: const TextStyle(fontSize: 18.0, color: Colors.white),
                   ),
                   Text(
-                    "5 Ağustos 2022",
-                    style: TextStyle(
+                    content,
+                    style: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 12.0,
+                      fontSize: 15.0,
                     ),
-                  )
+                  ),
                 ],
               ),
             ],

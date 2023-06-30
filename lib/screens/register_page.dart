@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:scooter_app/models/user.dart';
 import 'package:scooter_app/services/user_service_repository.dart';
-
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -20,39 +19,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final t4 = TextEditingController();
   final t5 = TextEditingController();
   final t6 = TextEditingController();
-
+  final t7 = TextEditingController();
+  final t8 = TextEditingController();
+  final userService = UserServiceRepository(http.Client());
   bool _isObsecure = true;
   bool _isObsecure2 = true;
-
-  //database a bağlanma
-  // Future<void> register(BuildContext context, String username, String password,
-  //     String email, String phone, String adress) async {
-  //   try {
-  //     final url = Uri.parse("https://localhost:7027/api/User/register");
-  //     final Map<String, dynamic> data = {
-  //       'username': t1.text,
-  //       'password': t2.text,
-  //       'email': t4.text,
-  //       'phone': t5.text,
-  //       'adress': t6.text
-  //     };
-  //     final requestBody = json.encode(data);
-  //     final response = await http.post(
-  //       url,
-  //       headers: {
-  //         "Content-Type": "application/json; charset=UTF-8",
-  //       },
-  //       body: requestBody,
-  //     );
-  //     if (response.statusCode == 200) {
-  //       print("istek başarılı");
-  //     } else {
-  //       print("Hata kodu : ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +60,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     customSizedBox(),
                     TextField(
                       controller: t1,
+                      decoration: customInputDecoration("Ad"),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    customSizedBox(),
+                    TextField(
+                      controller: t7,
+                      decoration: customInputDecoration("Soyad"),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    customSizedBox(),
+                    TextField(
+                      controller: t8,
                       decoration: customInputDecoration("Kullanıcı Adı"),
                       style: const TextStyle(color: Colors.white),
                     ),
@@ -163,7 +146,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               t3.text.isEmpty ||
                               t4.text.isEmpty ||
                               t5.text.isEmpty ||
-                              t6.text.isEmpty) {
+                              t6.text.isEmpty ||
+                              t8.text.isEmpty ||
+                              t7.text.isEmpty) {
                             showDialog(
                               context: context,
                               builder: (ctx) => AlertDialog(
@@ -219,37 +204,49 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
                             return;
                           } else {
-                            var userService =
-                                UserServiceRepository(http.Client());
-                            userService.register(
-                                t1.text, t2.text, t4.text, t5.text, t6.text);
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                elevation: 0,
-                                content: const Text("Kayıt Başarılı"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text("Kapat"),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const LoginPage()));
-                                    },
+                            userService
+                                .register(User(
+                                    id: "",
+                                    firstName: t1.text,
+                                    lastName: t7.text,
+                                    username: t8.text,
+                                    role: 1,
+                                    phoneNumber: t5.text,
+                                    email: t4.text,
+                                    address: t6.text,
+                                    password: t2.text,
+                                    createdDate: DateTime.now(),
+                                    lastLogindDate: DateTime(0001, 01, 01)))
+                                .then((value) {
+                              if (value) {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    elevation: 0,
+                                    content: const Text("Kayıt Başarılı"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text("Kapat"),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const LoginPage()));
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
+                                );
+                                t1.text = "";
+                                t2.text = "";
+                                t3.text = "";
+                                t4.text = "";
+                                t5.text = "";
+                                t6.text = "";
+                              }
+                            });
                           }
-
-                          t1.text = "";
-                          t2.text = "";
-                          t3.text = "";
-                          t4.text = "";
-                          t5.text = "";
-                          t6.text = "";
                         },
                         child: Container(
                           height: 50,

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
-import 'package:scooter_app/screens/rent_page.dart';
+import 'package:scooter_app/screens/profile_page.dart';
 
 class taslak extends StatefulWidget {
   const taslak({Key? key}) : super(key: key);
@@ -15,9 +15,9 @@ class _taslakState extends State<taslak> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    return Material(
-      color: const Color(0xff21254A),
-      child: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: const Color(0xff21254A),
+      body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +250,7 @@ class _HorizontalCard extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RentPage()));
+                            builder: (context) => const ProfilePage()));
                   },
                   icon: const Icon(
                     Icons.monetization_on,
