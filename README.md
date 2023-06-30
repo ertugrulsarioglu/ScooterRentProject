@@ -6,6 +6,13 @@ A new Flutter project.
 
 This project is a starting point for a Flutter application.
 
+# npm install
+
+
+https://github.com/ertugrulsarioglu/ScooterRentProject/assets/81019405/e6e01d0d-7ea2-432e-871d-b3863dfa4006
+
+
+
 A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
