@@ -1,13 +1,8 @@
 # scooter_app
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
+My graduation project
 
 # npm install
-
 
 https://github.com/ertugrulsarioglu/ScooterRentProject/assets/81019405/e6e01d0d-7ea2-432e-871d-b3863dfa4006
 
