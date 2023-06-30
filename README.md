@@ -8,6 +8,6 @@ https://github.com/ertugrulsarioglu/ScooterRentProject/assets/81019405/e6e01d0d-
 
 You can access the application's API through the following link.
 
-. https://github.com/ertugrulsarioglu/ScooterRentProjectAPI
+- https://github.com/ertugrulsarioglu/ScooterRentProjectAPI
 
 
