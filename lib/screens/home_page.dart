@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_unnecessary_containers, sort_child_properties_last, avoid_function_literals_in_foreach_calls
+// ignore_for_file: use_build_context_synchronously, avoid_unnecessary_containers, sort_child_properties_last, avoid_function_literals_in_foreach_calls, deprecated_member_use
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -113,14 +113,12 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const ScooterPage()),
+                        MaterialPageRoute(builder: (context) => const ScooterPage()),
                       );
 
                       _mapController.animateCamera(
                         CameraUpdate.newLatLngZoom(
-                          LatLng(_markers[result]!.position.latitude,
-                              _markers[result]!.position.longitude),
+                          LatLng(_markers[result]!.position.latitude, _markers[result]!.position.longitude),
                           15.0,
                         ),
                       );
@@ -129,8 +127,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          child: const Icon(Icons.electric_scooter_outlined,
-                              color: Colors.white),
+                          child: const Icon(Icons.electric_scooter_outlined, color: Colors.white),
                         ),
                         const SizedBox(width: 10),
                         const Text(
@@ -145,8 +142,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 1, vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
                       backgroundColor: const Color(0xff31274F),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -168,12 +164,9 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       stopMarkerMovement();
                       rentService.getRentDetail().then((value) {
-                        value.endLat =
-                            _markers[value.scooterId]?.position.latitude;
-                        value.endLang =
-                            _markers[value.scooterId]?.position.longitude;
-                        value.endDate =
-                            DateTime.now().add(const Duration(hours: 3));
+                        value.endLat = _markers[value.scooterId]?.position.latitude;
+                        value.endLang = _markers[value.scooterId]?.position.longitude;
+                        value.endDate = DateTime.now().add(const Duration(hours: 3));
                         rentService.updateRentDetail(value).then((value) {
                           if (value.isNotNullOrNoEmpty) {
                             showDialog(
@@ -204,8 +197,7 @@ class _HomePageState extends State<HomePage> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 1, vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
                       backgroundColor: const Color(0xff31274F),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -215,8 +207,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          child: const Icon(Icons.electric_scooter_outlined,
-                              color: Colors.white),
+                          child: const Icon(Icons.electric_scooter_outlined, color: Colors.white),
                         ),
                         const SizedBox(width: 10),
                         const Text(
@@ -246,8 +237,7 @@ class _HomePageState extends State<HomePage> {
                 if (choice == 'profile') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfilePage()),
+                    MaterialPageRoute(builder: (context) => const ProfilePage()),
                   );
                 } else if (choice == 'exit') {
                   Navigator.push(
@@ -257,8 +247,7 @@ class _HomePageState extends State<HomePage> {
                 } else if (choice == 'remainder') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const RemainderPage()),
+                    MaterialPageRoute(builder: (context) => const RemainderPage()),
                   );
                 } else if (choice == 'transactionHistory') {
                   showModalBottomSheet(
@@ -363,8 +352,7 @@ class _HomePageState extends State<HomePage> {
                             top: Radius.circular(20.0),
                           ),
                           image: DecorationImage(
-                            image: AssetImage(
-                                'assets/images/scooterBottomSheet.png'),
+                            image: AssetImage('assets/images/scooterBottomSheet.png'),
                             fit: BoxFit.cover,
                             alignment: Alignment.topCenter,
                           ),
@@ -392,8 +380,8 @@ class _HomePageState extends State<HomePage> {
                             context: context,
                             builder: (ctx) => AlertDialog(
                               elevation: 0,
-                              content: const Text(
-                                  "Yetersiz bakiye!\nLütfen bakiye yükleyip daha sonra tekrar deneyiniz."),
+                              content:
+                                  const Text("Yetersiz bakiye!\nLütfen bakiye yükleyip daha sonra tekrar deneyiniz."),
                               actions: <Widget>[
                                 TextButton(
                                   child: const Text("Kapat"),
@@ -431,8 +419,7 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         backgroundColor: const Color(0xFF713cd0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),

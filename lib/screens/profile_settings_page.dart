@@ -101,8 +101,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                                   width: 130,
                                   height: 130,
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 4, color: Colors.white),
+                                    border: Border.all(width: 4, color: Colors.white),
                                     boxShadow: [
                                       BoxShadow(
                                         spreadRadius: 2,
@@ -132,8 +131,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 ]),
                 customSizedBox(),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   child: Column(
                     children: [
                       TextField(
@@ -157,9 +155,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                                     isObsecurePassword = !isObsecurePassword;
                                   });
                                 },
-                                icon: Icon(isObsecurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility))),
+                                icon: Icon(isObsecurePassword ? Icons.visibility_off : Icons.visibility))),
                         obscureText: isObsecurePassword,
                         style: const TextStyle(color: Colors.white),
                       ),
@@ -179,8 +175,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -188,19 +183,15 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                         onPressed: () {
                           Navigator.of(context).pop(true);
                         },
-                        child: const Text(
-                          "Vazgeç",
-                          style: TextStyle(
-                              fontSize: 15,
-                              letterSpacing: 2,
-                              color: Colors.purple,
-                              fontWeight: FontWeight.bold),
-                        ),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(horizontal: 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20))),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                        child: const Text(
+                          "Vazgeç",
+                          style: TextStyle(
+                              fontSize: 15, letterSpacing: 2, color: Colors.purple, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () async {
@@ -215,6 +206,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                             userService1.saveUser(jsonEncode(value));
                           });
                         },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         child: const Text(
                           "Kaydet",
                           style: TextStyle(
@@ -222,13 +220,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                             letterSpacing: 2,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          padding: const EdgeInsets.symmetric(horizontal: 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                       ),
@@ -307,8 +298,7 @@ InputDecoration customInputDecoration(String labelText) {
     labelStyle: const TextStyle(color: Colors.white),
     contentPadding: const EdgeInsets.only(bottom: 5),
     floatingLabelBehavior: FloatingLabelBehavior.always,
-    hintStyle: const TextStyle(
-        color: Colors.grey, fontSize: 16, fontWeight: FontWeight.bold),
+    hintStyle: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.bold),
     enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.grey,
