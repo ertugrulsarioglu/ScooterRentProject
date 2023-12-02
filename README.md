@@ -1,16 +1,13 @@
 # scooter_app
 
-A new Flutter project.
+My graduation project
 
-## Getting Started
+# Trailer
 
-This project is a starting point for a Flutter application.
+https://github.com/ertugrulsarioglu/ScooterRentProject/assets/81019405/e6e01d0d-7ea2-432e-871d-b3863dfa4006
 
-A few resources to get you started if this is your first Flutter project:
+You can access the application's API through the following link.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- https://github.com/ertugrulsarioglu/ScooterRentProjectAPI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
